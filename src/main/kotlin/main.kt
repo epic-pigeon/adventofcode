@@ -1,5 +1,6 @@
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.*
 
 object Solver1 {
@@ -422,7 +423,40 @@ object Solver8 {
     }
 }
 
+object Solver9 {
+    private fun createLists(seq: List<Long>) = run {
+        val list = arrayListOf(seq)
+        while (true) {
+            val new = ArrayList<Long>()
+            for (i in 1 until list.last().size) {
+                new.add(list.last()[i] - list.last()[i-1])
+            }
+            list.add(new)
+            if (new.all { it == 0L }) break
+        }
+        list
+    }
+    fun solve1() {
+        val data = File("input9.txt").readLines().map { line -> line.split(' ').map { it.toLong() } }
+        println(data.sumOf { seq ->
+            val list = createLists(seq)
+            list.sumOf { it.last() }
+        })
+    }
+    fun solve2() {
+        val data = File("input9.txt").readLines().map { line -> line.split(' ').map { it.toLong() } }
+        println(data.sumOf { seq ->
+            val list = createLists(seq)
+            var res = 0L
+            for (i in (list.size - 2) downTo 0) {
+                res = list[i].first() - res
+            }
+            res
+        })
+    }
+}
+
 fun main() {
-    Solver8.solve2()
+    Solver9.solve2()
 }
 
